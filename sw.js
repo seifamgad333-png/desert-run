@@ -1,7 +1,9 @@
-var C="desert-run-v2",FILES=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png"];
+var C="desert-run-v3",TH="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",FILES=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(C).then(function(c){
-    return Promise.all(FILES.map(function(f){return c.add(f).catch(function(){})}));
+    var jobs=FILES.map(function(f){return c.add(f).catch(function(){})});
+    jobs.push(fetch(new Request(TH,{mode:"no-cors"})).then(function(r){return c.put(TH,r)}).catch(function(){}));
+    return Promise.all(jobs);
   }));
   self.skipWaiting();
 });
@@ -29,6 +31,12 @@ function nf(e){
 }
 self.addEventListener("fetch",function(e){
   if(e.request.method!=="GET")return;
+  if(e.request.url===TH){
+    e.respondWith(caches.match(e.request).then(function(m){
+      return m||fetch(e.request).then(function(r){var cp=r.clone();caches.open(C).then(function(c){c.put(TH,cp)});return r});
+    }));
+    return;
+  }
   if(new URL(e.request.url).origin!==location.origin)return;
   e.respondWith(nf(e));
 });
