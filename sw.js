@@ -1,4 +1,4 @@
-var C="desert-run-v3",TH="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",FILES=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png"];
+var C="desert-run-v26",TH="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",FILES=["./","./index.html","./manifest.json","./icon-192.png","./icon-512.png"];
 self.addEventListener("install",function(e){
   e.waitUntil(caches.open(C).then(function(c){
     var jobs=FILES.map(function(f){return c.add(f).catch(function(){})});
