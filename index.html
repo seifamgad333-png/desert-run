@@ -129,7 +129,7 @@ document.addEventListener("keydown",function(e){
 
 /* ===== 3D ===== */
 var T={},M={},G={},Pl={},pool={},Wd={},cur=null,mode="endless",DN={s1:0,s2:0,s3:0,s4:0,s5:0,s6:0,s7:0},WIN=2000,DL,shakeT=0,TEST=false,lying=false,keep=false,pk=[],flyT=0,cloakT=0,grace=0,fy=0,hasCup=false,cupSpawned=false,btxt="",fxs="",SN={s1:"Stage one",s2:"Stage two",s3:"Stage three",s4:"Stage four",s5:"Stage five",s6:"Stage six",s7:"Stage seven"},NX={s1:"s2",s2:"s3",s3:"s4",s4:"s5",s5:"s6",s6:"s7"};
-try{for(var kk in DN)DN[kk]=localStorage.getItem("dr_"+kk)==="1"?1:0}catch(e){}DN.s4=1;DN.s5=1;DN.s6=1;/*مؤقت: Stage five وsix وseven مفتوحين للتجربة، احذفي السطر ده بعدين*/
+try{for(var kk in DN)DN[kk]=localStorage.getItem("dr_"+kk)==="1"?1:0}catch(e){}
 var skyX,skyT,curA,curB,tgtA,tgtB,stageNow=-1;
 SFX.win=function(){[523,659,784,1047].forEach(function(f,i){setTimeout(function(){tone(f,f*1.01,.25,"square",.07)},i*160)})};
 function mkTex(w,h,fn,rx,ry){
@@ -478,7 +478,7 @@ function spawn(){
 }
 function start(m){
   if(!R)return;ambStop();
-  au();obs.forEach(freeRow);obs=[];setWorld(m);WIN=m==="s7"?100:2000;/*مؤقت: Stage seven بتخلص عند 100 للتجربة، احذفي الجزء ده بعدين*/
+  au();obs.forEach(freeRow);obs=[];setWorld(m);
   st="play";lying=false;keep=false;t=0;dist=0;v=14;lane=0;px=0;jt=-1;sl=-1;buf=null;gap=40;score=0;level=1;banner=0;shake=0;shakeT=0;lastScore=-1;lastLevel=0;
   $("ov").hidden=true;$("hud").hidden=false;$("bn").style.opacity="0";updEnd();pk.forEach(function(p){scene.remove(p.m)});pk=[];flyT=0;cloakT=0;grace=0;fy=0;hasCup=false;cupSpawned=false;setCloak(false);btxt="";fxs="";$("fx").textContent="";
   $("hl").textContent=m==="endless"?"المستوى 1":SN[m]+" · 0/"+WIN;
@@ -531,10 +531,10 @@ function finale(){
   st="win";keep=true;jt=-1;sl=-1;px=lane;obs.forEach(freeRow);obs=[];updEnd();
   DN.s7=1;try{localStorage.setItem("dr_s7","1")}catch(e){}
   $("hud").hidden=true;$("bn").style.opacity="0";
-  setTimeout(function(){$("fin").hidden=false;$("fn1").style.visibility="visible";drone(7);var t1=say("ماذا تريد",.2,.6);
-    typeTo($("fl1"),"ماذا تريد؟",function(){
-      $("fn2").style.visibility="visible";var t2=say("أريد",1.1,.8);
-      typeTo($("fl2"),"أريد ......",function(){
+  setTimeout(function(){$("fin").hidden=false;$("fn1").style.visibility="visible";drone(7);var t1=say("ماذا تتمنى",.2,.6);
+    typeTo($("fl1"),"ماذا تتمنى؟",function(){
+      $("fn2").style.visibility="visible";var t2=say("أتمنى",1.1,.8);
+      typeTo($("fl2"),"أتمنى ......",function(){
         vox(60,28,1.4,"sine",.28,200);
         $("fin").hidden=true;var b=$("tbc");b.hidden=false;setTimeout(function(){b.style.opacity="1"},60);
       },2,t2);
@@ -548,7 +548,7 @@ function win(){if(mode==="s7"){finale();return}
   setTimeout(function(){
     $("ot").textContent=mode==="s7"?"مبروك! 🏆":"مبروك! 🎉";
     $("os").textContent="خلّصت "+SN[mode];
-    $("ob").textContent=mode==="s6"?"خرجت من الهرم، الفضاء مستنيك 🚀":mode==="s7"?"وصلت الفضاء! 🚀 الرحلة خلصت... لحد دلوقتي ✨":"نتيجتك: "+score;
+    $("ob").textContent=mode==="s6"?"خرجت من الهرم الحاكم مستنيك":mode==="s7"?"وصلت الفضاء! 🚀 الرحلة خلصت... لحد دلوقتي ✨":"نتيجتك: "+score;
     screen("over");$("b-again").textContent="العب تاني";$("b-next").hidden=!NX[mode];if(NX[mode])$("b-next").textContent=SN[NX[mode]];
     $("lbbox").hidden=true;$("how").hidden=true;
   },1400);
@@ -591,7 +591,7 @@ function update(dt){
     if(o.z>10){freeRow(o);obs.splice(k,1)}
   }
   if(st==="play"){
-    score=Math.floor(dist/1.6);updEnd();if(mode==="s7"){var pr=score/WIN;if(pr>=.6){ambStart();ambLevel(.04+.12*Math.min(1,(pr-.6)/.4))}}
+    score=Math.floor(dist/1.6);updEnd();if(mode==="s7"){var pr=score/WIN;if(pr>=.45){ambStart();ambLevel(.04+.12*Math.min(1,(pr-.45)/.55))}}
     if(mode!=="endless"&&score>=WIN){score=WIN;$("hs").textContent=score;win();return}
     var nl=lv();if(nl>level){level=nl;banner=2;btxt="";SFX.mile()}
     if(score!==lastScore){lastScore=score;$("hs").textContent=score;if(mode!=="endless")$("hl").textContent=SN[mode]+" · "+score+"/"+WIN}
